@@ -12,14 +12,14 @@ class Result<T> {
 
   bool get isFailure => error != null;
 
-  void when({
-    required void Function(T value) success,
-    required void Function(Exception error) failure,
+  R when<R>({
+    required R Function(T value) success,
+    required R Function(Exception error) failure,
   }) {
     if (isSuccess) {
-      success(value as T);
+      return success(value as T);
     } else {
-      failure(error!);
+      return failure(error!);
     }
   }
 }

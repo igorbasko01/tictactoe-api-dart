@@ -7,6 +7,12 @@ class GameHandler {
   GameHandler(this._gameService);
 
   Future<Response> getGame(Request request) async {
-    return Response.ok('{"id":"123","board":[],"status":"IN_PROGRESS"}');
+    var gameId = request.url.pathSegments[1];
+    var game = _gameService.getGame(gameId);
+    var response = game.when(
+      success: (value) => Response.ok('{"id":"123","board":[],"status":"IN_PROGRESS"}'),
+      failure: (error) => Response.notFound('Game not found'),
+    );
+    return response;
   }
 }

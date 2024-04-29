@@ -41,4 +41,23 @@ void main() {
       failure: (error) => expect(error, isA<Exception>()),
     );
   });
+
+  test('Result handles success with when and returns a value', () {
+    final result = Result.success(42);
+    final value = result.when(
+      success: (value) => value,
+      failure: (error) => fail('Should not be called'),
+    );
+    expect(value, isA<int>());
+    expect(value, 42);
+  });
+
+  test('Result handles failure with when and returns an error', () {
+    final result = Result.failure(Exception('An error occurred'));
+    final error = result.when(
+      success: (value) => fail('Should not be called'),
+      failure: (error) => error,
+    );
+    expect(error, isA<Exception>());
+  });
 }

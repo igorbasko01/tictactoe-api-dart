@@ -26,4 +26,18 @@ void main() {
       verify(() => gameService.getGame('123')).called(1);
     });
   });
+
+  test('GET /games/{game_id} should return 404 if game not found', () async {
+    final gameService = MockGameService();
+    final handler = GameHandler(gameService);
+
+    when(() => gameService.getGame('222')).thenReturn(Result.failure(Exception('Game not found')));
+
+    var request = Request('GET', Uri.parse('http://localhost/games/222'));
+    var response = await handler.getGame(request);
+
+    expect(response.statusCode, 404);
+
+    verify(() => gameService.getGame('222')).called(1);
+  });
 }
