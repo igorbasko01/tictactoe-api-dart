@@ -1,12 +1,13 @@
 import 'package:tic_tac_toe_api/models/game.dart';
+import 'package:tic_tac_toe_api/utilities/result.dart';
 
 abstract class GameService {
-  Game getGame(String gameId);
+  Result<Game> getGame(String gameId);
 }
 
 class GameServiceImpl implements GameService {
   @override
-  Game getGame(String gameId) {
-    return Game(id: '123', board: [], status: 'IN_PROGRESS');
+  Result<Game> getGame(String gameId) {
+    return Result.success(Game(id: '123', board: [], status: 'IN_PROGRESS'));
   }
 }
