@@ -31,7 +31,7 @@ void main() {
     final gameService = MockGameService();
     final handler = GameHandler(gameService);
 
-    when(() => gameService.getGame('222')).thenReturn(Result.failure(Exception('Game not found')));
+    when(() => gameService.getGame('222')).thenReturn(Result.failure(GameNotFoundException('Game not found')));
 
     var request = Request('GET', Uri.parse('http://localhost/games/222'));
     var response = await handler.getGame(request);
@@ -39,5 +39,19 @@ void main() {
     expect(response.statusCode, 404);
 
     verify(() => gameService.getGame('222')).called(1);
+  });
+
+  test('GET /games/{game_id} should return 500 if an unknown error happens', () async {
+    final gameService = MockGameService();
+    final handler = GameHandler(gameService);
+
+    when(() => gameService.getGame('333')).thenReturn(Result.failure(Exception('An unknown error occurred')));
+
+    var request = Request('GET', Uri.parse('http://localhost/games/333'));
+    var response = await handler.getGame(request);
+
+    expect(response.statusCode, 500);
+
+    verify(() => gameService.getGame('333')).called(1);
   });
 }

@@ -11,7 +11,13 @@ class GameHandler {
     var game = _gameService.getGame(gameId);
     var response = game.when(
       success: (value) => Response.ok('{"id":"123","board":[],"status":"IN_PROGRESS"}'),
-      failure: (error) => Response.notFound('Game not found'),
+      failure: (error) {
+        if (error is GameNotFoundException) {
+          return Response.notFound('Game not found');
+        } else {
+          return Response.internalServerError(body: 'An unknown error occurred');
+        }
+      }
     );
     return response;
   }

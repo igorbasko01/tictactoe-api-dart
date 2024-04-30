@@ -11,3 +11,9 @@ class GameServiceImpl implements GameService {
     return Result.success(Game(id: '123', board: [], status: 'IN_PROGRESS'));
   }
 }
+
+class GameNotFoundException implements Exception {
+  final String message;
+
+  GameNotFoundException(this.message);
+}
