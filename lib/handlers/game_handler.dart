@@ -10,7 +10,7 @@ class GameHandler {
     var gameId = request.url.pathSegments[1];
     var game = _gameService.getGame(gameId);
     var response = game.when(
-      success: (value) => Response.ok('{"id":"123","board":[],"status":"IN_PROGRESS"}'),
+      success: (value) => Response.ok(game.value?.toJsonString()),
       failure: (error) {
         if (error is GameNotFoundException) {
           return Response.notFound('Game not found');

@@ -4,4 +4,8 @@ class Game {
   final String status;
 
   Game({required this.id, required this.board, required this.status});
+
+  String toJsonString() {
+    return '{"id":"$id","board":$board,"status":"$status"}';
+  }
 }

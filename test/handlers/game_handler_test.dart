@@ -27,6 +27,22 @@ void main() {
     });
   });
 
+  test('GET /games/{game_id} should return game details when waiting for players', () async {
+    final gameService = MockGameService();
+    final handler = GameHandler(gameService);
+
+    when(() => gameService.getGame('123')).thenReturn(Result.success(Game(id: '123', board: [], status: 'WAITING_FOR_PLAYERS')));
+
+    var request = Request('GET', Uri.parse('http://localhost/games/123'));
+    var response = await handler.getGame(request);
+    String body = await response.readAsString();
+
+    expect(response.statusCode, 200);
+    expect(body, '{"id":"123","board":[],"status":"WAITING_FOR_PLAYERS"}');
+
+    verify(() => gameService.getGame('123')).called(1);
+  });
+
   test('GET /games/{game_id} should return 404 if game not found', () async {
     final gameService = MockGameService();
     final handler = GameHandler(gameService);
