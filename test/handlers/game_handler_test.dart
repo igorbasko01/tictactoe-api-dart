@@ -70,4 +70,34 @@ void main() {
 
     verify(() => gameService.getGame('333')).called(1);
   });
+
+  test('POST /games should return 201 if game is created', () async {
+    final gameService = MockGameService();
+    final handler = GameHandler(gameService);
+
+    when(() => gameService.createGame()).thenReturn(Result.success(Game(id: '123', board: [], status: 'WAITING_FOR_PLAYERS')));
+
+    var request = Request('POST', Uri.parse('http://localhost/games'));
+    var response = await handler.createGame(request);
+    String body = await response.readAsString();
+
+    expect(response.statusCode, 201);
+    expect(body, '{"id":"123","board":[],"status":"WAITING_FOR_PLAYERS"}');
+
+    verify(() => gameService.createGame()).called(1);
+  });
+
+  test('POST /games should return 500 if an unknown error happens', () async {
+    final gameService = MockGameService();
+    final handler = GameHandler(gameService);
+
+    when(() => gameService.createGame()).thenReturn(Result.failure(Exception('An unknown error occurred')));
+
+    var request = Request('POST', Uri.parse('http://localhost/games'));
+    var response = await handler.createGame(request);
+
+    expect(response.statusCode, 500);
+
+    verify(() => gameService.createGame()).called(1);
+  });
 }

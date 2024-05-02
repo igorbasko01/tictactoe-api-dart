@@ -21,4 +21,13 @@ class GameHandler {
     );
     return response;
   }
+
+  Future<Response> createGame(Request request) async {
+    var game = _gameService.createGame();
+    var response = game.when(
+      success: (value) => Response(201, body: game.value?.toJsonString()),
+      failure: (error) => Response.internalServerError(body: 'An unknown error occurred'),
+    );
+    return response;
+  }
 }
