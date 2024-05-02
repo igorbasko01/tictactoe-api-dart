@@ -33,6 +33,8 @@ void main() {
       verify(() => gamePlayService.getPlayers('123')).called(1);
     });
 
+    test('GET /games/{game_id}/players should return a single player if it is so', () async {});
+    test('GET /games/{game_id}/players should return an empty list if there are no players', () async {});
     test('GET /games/{game_id}/players should return 404 if game not found', () async {});
     test('GET /games/{game_id}/players should return 500 if an unknown error happens', () async {});
     test('POST /games/{game_id}/players should return 201 if player is created', () async {});
