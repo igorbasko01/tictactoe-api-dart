@@ -8,3 +8,13 @@ class Player {
     return '{"id":"$id","name":"$name"}';
   }
 }
+
+class CreatePlayerRequest {
+  final String playerName;
+
+  CreatePlayerRequest({required this.playerName});
+
+  factory CreatePlayerRequest.fromJson(Map<String, dynamic> json) {
+    return CreatePlayerRequest(playerName: json['name']);
+  }
+}
