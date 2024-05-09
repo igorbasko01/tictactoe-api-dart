@@ -33,7 +33,17 @@ class PlayersHandler {
     final playerRequestJson =
         jsonDecode(await request.readAsString()) as Map<String, dynamic>;
     final playerRequest = CreatePlayerRequest.fromJson(playerRequestJson);
-    _gameplayService.createPlayer('123', 'Player 1');
-    return Response(201, body: '{"id":"1","name":"Player 1"}');
+    var result = _gameplayService.createPlayer(gameId, playerRequest.name);
+    var response = result.when(
+        success: (player) => Response(201, body: player.toJsonString()),
+        failure: (error) {
+          if (error is GameNotFoundException) {
+            return Response.notFound('Game not found');
+          } else {
+            return Response.internalServerError(
+                body: 'An unknown error occurred');
+          }
+        });
+    return response;
   }
 }

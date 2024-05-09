@@ -10,9 +10,9 @@ class Player {
 }
 
 class CreatePlayerRequest {
-  final String playerName;
+  final String name;
 
-  CreatePlayerRequest({required this.playerName});
+  CreatePlayerRequest({required this.name});
 
   factory CreatePlayerRequest.fromJson(Map<String, dynamic> json) {
     if (!json.containsKey('name')) {
@@ -21,7 +21,7 @@ class CreatePlayerRequest {
     if (json['name'].isEmpty) {
       throw CreatePlayerRequestException('name field cannot be empty');
     }
-    return CreatePlayerRequest(playerName: json['name']);
+    return CreatePlayerRequest(name: json['name']);
   }
 }
 

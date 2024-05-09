@@ -117,7 +117,23 @@ void main() {
       verify(() => gamePlayService.createPlayer('123', 'Player 1')).called(1);
     });
 
-    test('POST /games/{game_id}/players should return 201 if player created for another game', () {});
+    test('POST /games/{game_id}/players should return 201 if player created for another game', () async {
+      var gamePlayService = MockGameplayService();
+      var handler = PlayersHandler(gamePlayService);
+
+      when(() => gamePlayService.createPlayer('124', 'Player 1')).thenReturn(Result.success(Player(id: '1', name: 'Player 1')));
+
+      var request = Request('POST', Uri.parse('http://localhost/games/124/players'));
+      request = request.change(body: '{"name": "Player 1"}');
+      var response = await handler.createPlayer(request);
+      var body = await response.readAsString();
+
+      expect(response.statusCode, 201);
+      expect(body, '{"id":"1","name":"Player 1"}');
+
+      verify(() => gamePlayService.createPlayer('124', 'Player 1')).called(1);
+    });
+
     test('POST /games/{game_id}/players should return 404 if game not found', () async {});
     test('POST /games/{game_id}/players should return 500 if an unknown error happens', () async {});
     test('POST /games/{game_id}/players should return 400 if player name is missing', () async {});

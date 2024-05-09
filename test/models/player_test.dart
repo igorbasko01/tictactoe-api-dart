@@ -9,7 +9,7 @@ void main() {
       var json = {'name': 'Player 1'};
       var createPlayerRequest = CreatePlayerRequest.fromJson(json);
 
-      expect(createPlayerRequest.playerName, 'Player 1');
+      expect(createPlayerRequest.name, 'Player 1');
     });
 
     test(
